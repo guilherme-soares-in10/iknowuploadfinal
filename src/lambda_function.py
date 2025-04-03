@@ -4,12 +4,22 @@ import json
 import boto3
 # import time 
 import time
-# import two packages to help us with dates and date formatting
+from decimal import Decimal
 
 # create a DynamoDB object using the AWS SDK
 dynamodb = boto3.resource('dynamodb')
 # use the DynamoDB object to select our table
 table = dynamodb.Table('iknowuploadfinaltable')
+
+# Helper function to convert Decimal types to regular numbers
+def convert_decimal_to_number(obj):
+    if isinstance(obj, Decimal):
+        return int(obj) if obj % 1 == 0 else float(obj)
+    elif isinstance(obj, dict):
+        return {k: convert_decimal_to_number(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_decimal_to_number(i) for i in obj]
+    return obj
 
 # define the handler function that the Lambda service will use as an entry point
 def lambda_handler(event, context):
@@ -20,7 +30,7 @@ def lambda_handler(event, context):
     print("HTTP method:", http_method)
 
     # Check if this is a DELETE request by looking at the event structure
-    if 'id' in event and 'httpMethod' not in event:
+    if http_method == 'DELETE' or ('id' in event and 'httpMethod' not in event and 'displayName' not in event):
         # This is a DELETE request
         try:
             # Get the ID of the company to delete
@@ -66,12 +76,16 @@ def lambda_handler(event, context):
         # If event has company data, treat as POST
         if 'companyId' in event and 'displayName' in event and 'categories' in event:
             try:
+                # Get current timestamp
+                timestamp = int(time.time())
+                
                 # Create the company item
                 response = table.put_item(
                     Item={
                         'ID': event['companyId'],
                         'displayName': event['displayName'],
-                        'categories': event['categories']
+                        'categories': event['categories'],
+                        'createdAt': timestamp
                     }
                 )
                 
@@ -99,6 +113,12 @@ def lambda_handler(event, context):
                 response = table.scan()
                 items = response.get('Items', [])
                 
+                # Convert Decimal types to regular numbers
+                items = convert_decimal_to_number(items)
+                
+                # Sort items by createdAt timestamp
+                items.sort(key=lambda x: x.get('createdAt', 0))
+                
                 return {
                     'statusCode': 200,
                     'headers': {
@@ -123,6 +143,12 @@ def lambda_handler(event, context):
             # Scan the DynamoDB table
             response = table.scan()
             items = response.get('Items', [])
+            
+            # Convert Decimal types to regular numbers
+            items = convert_decimal_to_number(items)
+            
+            # Sort items by createdAt timestamp
+            items.sort(key=lambda x: x.get('createdAt', 0))
             
             return {
                 'statusCode': 200,
@@ -158,12 +184,16 @@ def lambda_handler(event, context):
                     'body': json.dumps({'error': 'Missing required fields: companyId, displayName, and categories are required'})
                 }
             
+            # Get current timestamp
+            timestamp = int(time.time())
+            
             # Create the company item
             response = table.put_item(
                 Item={
                     'ID': body['companyId'],
                     'displayName': body['displayName'],
-                    'categories': body['categories']
+                    'categories': body['categories'],
+                    'createdAt': timestamp
                 }
             )
             
@@ -176,6 +206,64 @@ def lambda_handler(event, context):
                 'body': json.dumps({'message': f'Successfully created company: {body["displayName"]}'})
             }
         except Exception as e:
+            return {
+                'statusCode': 500,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'error': str(e)})
+            }
+    
+    elif http_method == 'PUT':
+        try:
+            # Get the request body - it might be in event['body'] or directly in the event
+            body = event.get('body', event)
+            if isinstance(body, str):
+                body = json.loads(body)
+            print("PUT request body:", body)  # Add logging
+            
+            # Validate required fields
+            if 'id' not in body or 'displayName' not in body:
+                return {
+                    'statusCode': 400,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    'body': json.dumps({'error': 'Missing required fields: id and displayName are required'})
+                }
+            
+            # Update the company item
+            response = table.update_item(
+                Key={
+                    'ID': body['id']
+                },
+                UpdateExpression='SET displayName = :displayName',
+                ExpressionAttributeValues={
+                    ':displayName': body['displayName']
+                },
+                ReturnValues='ALL_NEW'
+            )
+            
+            print("Update response:", response)  # Add logging
+            
+            # Convert any Decimal types in the response to regular numbers
+            updated_item = convert_decimal_to_number(response.get('Attributes', {}))
+            
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({
+                    'message': f'Successfully updated company: {body["displayName"]}',
+                    'updatedItem': updated_item
+                })
+            }
+        except Exception as e:
+            print("Error in PUT handler:", str(e))  # Add logging
             return {
                 'statusCode': 500,
                 'headers': {

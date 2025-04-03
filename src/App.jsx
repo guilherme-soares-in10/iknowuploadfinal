@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Button from './components/common/Button/Buton'
 import './App.css'
-
+import AdminDashboard from './components/admin/AdminDashboard/AdminDashboard'
 function App() {
   const [dynamoData, setDynamoData] = useState([])
 
@@ -42,13 +42,41 @@ function App() {
     .catch(error => console.log('error', error));
   }
 
+  const updateDynamoData = async (id, displayName) => {
+    try {
+      const response = await fetch('https://irqns6amh7.execute-api.us-east-1.amazonaws.com/dev/companies', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: id,
+          displayName: displayName,
+          httpMethod: 'PUT'  // Add this to ensure the Lambda function recognizes it as a PUT request
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update company');
+      }
+
+      const data = await response.json();
+      console.log('Update successful:', data);
+      fetchDynamoData(); // Refresh the data after successful update
+      return data;
+    } catch (error) {
+      console.error('Error updating company:', error);
+      throw error;
+    }
+  };
+
   // Fetch data when component mounts
   useEffect(() => {
     fetchDynamoData();
   }, []); // Empty dependency array means this runs once when component mounts
 
-   // define the callAPI function that takes a first name and last name as parameters
-var callAPI = (firstName,lastName)=>{
+   // define the sendDynamoData function that takes a first name and last name as parameters
+  var sendDynamoData = (firstName,lastName)=>{
     // instantiate a headers object
     var myHeaders = new Headers();
     // add content type header to object
@@ -85,10 +113,15 @@ var callAPI = (firstName,lastName)=>{
         fetchDynamoData();
     })
     .catch(error => console.log('error', error));
-}
+  }
+
+  const handleUpdate = () => {
+    fetchDynamoData(); // Refresh the data after an update
+  };
 
   return (
     <>
+    <div className='App'>
         <header>
           <div className='signOutButtonContainer'>
             <div className='adminIndicator'>
@@ -101,45 +134,18 @@ var callAPI = (firstName,lastName)=>{
           </div>
         </header>
         <main>
-          <form>
-            <label>Company ID :</label>
-            <input type="text" id="fName" placeholder="e.g., escala"></input>
-            <label>Display Name :</label>
-            <input type="text" id="lName" placeholder="e.g., Escala"></input>
-            <button type="button" onClick={()=>callAPI(document.getElementById('fName').value,document.getElementById('lName').value)}>Add Company</button>
-          </form>
-
-          <h2>Companies</h2>
-          <div className="dynamodb-data">
-            <div className="data-container">
-              {dynamoData.length > 0 ? (
-                dynamoData.map((company, index) => (
-                  <div key={index} className="data-item">
-                    <div className='data-item-container'>
-                      <h3>{company.displayName}</h3>
-                      <div className="categories">
-                        {company.categories.map((category, catIndex) => (
-                          <div key={catIndex} className="category-item">
-                            <p>{category.text}</p>
-                            <small>Category: {category.category}</small>
-                          </div>
-                        ))}
-                      </div>
-                      <Button text='Remove' onClick={() => deleteDynamoData(company.ID)}></Button>
-                    </div>
-                              
-                  </div>
-                      ))
-                  ) : (
-                      <p>No data loaded yet</p>
-                  )}
-            </div>
-          </div>
+          <AdminDashboard 
+            dynamoData={dynamoData} 
+            deleteDynamoData={deleteDynamoData} 
+            sendDynamoData={sendDynamoData}
+            updateDynamoData={updateDynamoData}
+          />
         </main>
         <footer>
           <p>© 2025 IN10</p>
         </footer>
-       
+    </div>   
+     
     </>
   )
 }

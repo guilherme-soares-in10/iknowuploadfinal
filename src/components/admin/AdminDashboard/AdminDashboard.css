@@ -1,0 +1,26 @@
+.adminDashboardContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    border: 1px solid var(--gray-color);
+    padding: 20px;
+    
+}
+
+.company-management-container{
+    overflow-y: scroll;
+    max-height: 100%;
+    width: 100%;
+    border: 1px solid var(--gray-color);
+}
+
+.data-item-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px;
+}

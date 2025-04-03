@@ -1,0 +1,115 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--white-color);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 60%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.modal-title {
+    flex: 1;
+}
+
+.modal-title h2 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: var(--subheading-font-size);
+}
+
+.company-attribute {
+    margin: 0.5rem 0 0;
+    color: var(--gray-color);
+    font-size: var(--small-font-size);
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray-color);
+    padding: 0.5rem;
+    line-height: 1;
+    width: auto;
+    height: auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: var(--gray-color);
+    color: var(--white-color);
+}
+
+.modal-body {
+    margin-top: 1rem;
+}
+
+.tab-labels {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray-color);
+    padding-bottom: 0.5rem;
+}
+
+.tab-label {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    color: var(--gray-color);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.tab-label:hover {
+    color: var(--primary-color);
+    background-color: var(--gray-color);
+}
+
+.tab-label.active {
+    color: var(--primary-color);
+    background-color: var(--gray-color);
+}
+
+.tab-content {
+    padding: 1rem 0;
+}
+
+.modal-actions {
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+}
+
+.modal-actions button {
+    flex: 1;
+    min-width: 0;
+} 
