@@ -2,8 +2,64 @@ import { useState, useEffect } from 'react'
 import Button from './components/common/Button/Buton'
 import './App.css'
 import AdminDashboard from './components/admin/AdminDashboard/AdminDashboard'
+import { Amplify } from 'aws-amplify'
+import { withAuthenticator } from '@aws-amplify/ui-react'
+import { signOut } from '@aws-amplify/auth';
+import { fetchAuthSession } from 'aws-amplify/auth';
+import '@aws-amplify/ui-react/styles.css'
+
+
+// Configure Amplify
+Amplify.configure({
+  aws_project_region: 'us-east-1',
+  aws_cognito_region: 'us-east-1',
+  aws_user_pools_id: 'us-east-1_8O2O3UkkF',
+  aws_user_pools_web_client_id: 'vdb2e71v0lovn4dl35sdqjirb'
+})
+
 function App() {
   const [dynamoData, setDynamoData] = useState([])
+  const [userRole, setUserRole] = useState(null)
+  const [userCompany, setUserCompany] = useState(null)
+  const [companyDisplayName, setCompanyDisplayName] = useState(null)
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const { tokens } = await fetchAuthSession();
+        console.log('Full token payload:', tokens.accessToken.payload);
+        const groups = tokens.accessToken.payload['cognito:groups'];
+        
+        // Try different ways to access the companyID
+        const companyID = 
+          tokens.accessToken.payload['custom:companyID'] || 
+          tokens.accessToken.payload['companyID'] ||
+          tokens.idToken.payload['custom:companyID'] ||
+          tokens.idToken.payload['companyID'];
+        
+        console.log('User groups:', groups);
+        console.log('User company ID:', companyID);
+        
+        // Set user role based on groups
+        if (groups && groups.includes('admin')) {
+          setUserRole('admin');
+        } else {
+          setUserRole('company');
+          setUserCompany(companyID);
+          // Fetch company data to get displayName
+          const company = dynamoData.find(item => item.ID === companyID);
+          if (company) {
+            setCompanyDisplayName(company.displayName);
+          }
+        }
+      } catch (error) {
+        console.error('Error getting user info:', error);
+        setUserRole('company');
+      }
+    };
+    
+    getUserInfo();
+  }, [dynamoData]); // Add dynamoData as dependency
 
   // Function to fetch DynamoDB data
   const fetchDynamoData = () => {
@@ -119,27 +175,42 @@ function App() {
     fetchDynamoData(); // Refresh the data after an update
   };
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
   return (
     <>
     <div className='App'>
         <header>
           <div className='signOutButtonContainer'>
             <div className='adminIndicator'>
-              Admin 
+              {userRole === 'admin' ? 'Admin' : companyDisplayName} 
             </div>
-            <Button className="signOutButton" text="Sign out"/>            
+            <Button className="signOutButton" text="Sign out" onClick={handleSignOut}/>            
           </div>
           <div>
             <img className='in10Logo' src="./src/images/in10Logo.svg" width="200px" alt="in10Logo"/>
           </div>
         </header>
         <main>
-          <AdminDashboard 
-            dynamoData={dynamoData} 
-            deleteDynamoData={deleteDynamoData} 
-            sendDynamoData={sendDynamoData}
-            updateDynamoData={updateDynamoData}
-          />
+          {userRole === 'admin' ? (
+            <AdminDashboard 
+              dynamoData={dynamoData} 
+              deleteDynamoData={deleteDynamoData} 
+              sendDynamoData={sendDynamoData}
+              updateDynamoData={updateDynamoData}
+            />
+          ) : (
+            <div>
+              <h2>Company Interface for {userCompany}</h2>
+              {/* Here we'll add the company-specific interface later */}
+            </div>
+          )}
         </main>
         <footer>
           <p>© 2025 IN10</p>
@@ -150,4 +221,8 @@ function App() {
   )
 }
 
-export default App
+export default withAuthenticator(App, {
+  signUpAttributes: [
+    'email'
+  ]
+});
