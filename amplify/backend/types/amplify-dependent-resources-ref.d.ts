@@ -21,5 +21,11 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     }
+  },
+  "storage": {
+    "iknowuploadfinalstorage": {
+      "BucketName": "string",
+      "Region": "string"
+    }
   }
 }

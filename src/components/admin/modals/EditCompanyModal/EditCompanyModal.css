@@ -15,7 +15,8 @@
     background-color: var(--white-color);
     padding: 2rem;
     border-radius: 8px;
-    width: 60%;
+    width: 1200px !important;
+    max-width: 90vw !important;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
@@ -157,3 +158,23 @@
 .add-category-form button:hover {
     background-color: var(--primary-color-dark);
 } 
+
+.category-item-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.remove-category-button {
+    padding: 4px 8px;
+    background-color: var(--error-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.remove-category-button:hover {
+    background-color: var(--error-color-dark);
+}

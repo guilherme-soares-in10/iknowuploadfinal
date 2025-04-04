@@ -83,5 +83,27 @@
         }
       ]
     }
+  },
+  "storage": {
+    "iknowuploadfinalstorage": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "iknowuploadfinal484d5280"
+        },
+        {
+          "attributes": [
+            "companyGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
   }
 }

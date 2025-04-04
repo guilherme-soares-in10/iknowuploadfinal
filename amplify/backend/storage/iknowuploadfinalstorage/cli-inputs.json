@@ -1,0 +1,19 @@
+{
+  "resourceName": "iknowuploadfinalstorage",
+  "policyUUID": "aae979e2",
+  "bucketName": "iknowuploadfinal-storage",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "groupAccess": {
+    "company": [
+      "CREATE_AND_UPDATE",
+      "READ",
+      "DELETE"
+    ]
+  }
+}

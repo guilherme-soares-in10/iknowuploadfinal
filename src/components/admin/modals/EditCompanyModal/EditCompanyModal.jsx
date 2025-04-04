@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './EditCompanyModal.css';
+import Button from '../../../common/Button/Button';
 
 const EditCompanyModal = ({ company, onClose, onUpdate }) => {
     const [displayName, setDisplayName] = useState(company.displayName);
@@ -24,8 +25,18 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
         }
     };
 
+    const handleRemoveCategory = (index) => {
+        const updatedCategories = categories.filter((_, i) => i !== index);
+        setCategories(updatedCategories);
+    };
+
+    const handleRemoveClick = (e, index) => {
+        e.stopPropagation(); // Prevent event bubbling
+        handleRemoveCategory(index);
+    };
+
     return (
-        <div className="modal-overlay">
+        <div className="modal-overlay"> 
             <div className="modal-content">
                 <div className="modal-header">
                     <div className="modal-title">
@@ -56,14 +67,6 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                         </div>
                         <div className="form-group">
                             <label>Categories</label>
-                            <div className="categories-list">
-                                {categories.map((category, index) => (
-                                    <div key={index} className="category-item">
-                                        <span>{category.text}</span>
-                                        <span className="category-id">({category.category})</span>
-                                    </div>
-                                ))}
-                            </div>
                             <div className="add-category-form">
                                 <input
                                     type="text"
@@ -78,6 +81,21 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                     onChange={(e) => setNewCategory({ ...newCategory, category: e.target.value })}
                                 />
                                 <button type="button" onClick={handleAddCategory}>Add Category</button>
+                            </div>
+                            <div className="categories-list">
+                                {categories.map((category, index) => (
+                                    <div key={index} className="category-item">
+                                        <div className="category-item-content">
+                                            <span>{category.text}</span>
+                                            <span className="category-id">({category.category})</span>
+                                        </div>
+                                        <Button 
+                                            text="Remove" 
+                                            backgroundColor="var(--error-color)"
+                                            onClick={(e) => handleRemoveClick(e, index)}
+                                        />
+                                    </div>
+                                ))}
                             </div>
                         </div>
                         <div className="modal-buttons">

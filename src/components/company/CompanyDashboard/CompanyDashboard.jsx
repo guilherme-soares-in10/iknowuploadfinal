@@ -19,6 +19,7 @@ const CompanyDashboard = ({ companyData }) => {
                         onClick={handleUpload}
                         cardId={category.category}
                         fileFormat=".pdf,.doc,.docx"
+                        companyId={companyData.ID}
                     />
                 ))}
             </div>

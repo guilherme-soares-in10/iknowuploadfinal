@@ -23,6 +23,9 @@
           "deploymentBucketName": "amplify-iknowuploadfinal-dev-2eea8-deployment",
           "s3Key": "amplify-builds/iknowuploadfinal484d5280PostConfirmation-7a6e4d79525453577068-build.zip"
         }
+      },
+      "storage": {
+        "iknowuploadfinalstorage": {}
       }
     }
   }

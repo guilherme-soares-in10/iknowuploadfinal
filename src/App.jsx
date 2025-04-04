@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import Button from './components/common/Button/Buton'
+import Button from './components/common/Button/Button'
 import './App.css'
 import AdminDashboard from './components/admin/AdminDashboard/AdminDashboard'
 import CompanyDashboard from './components/company/CompanyDashboard/CompanyDashboard'
 import { Amplify } from 'aws-amplify'
-import { withAuthenticator } from '@aws-amplify/ui-react'
+import { withAuthenticator, ThemeProvider, createTheme } from '@aws-amplify/ui-react'
 import { signOut } from '@aws-amplify/auth';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import '@aws-amplify/ui-react/styles.css'
@@ -12,11 +12,74 @@ import '@aws-amplify/ui-react/styles.css'
 
 // Configure Amplify
 Amplify.configure({
-  aws_project_region: 'us-east-1',
-  aws_cognito_region: 'us-east-1',
-  aws_user_pools_id: 'us-east-1_8O2O3UkkF',
-  aws_user_pools_web_client_id: 'vdb2e71v0lovn4dl35sdqjirb'
-})
+  Auth: {
+    Cognito: {
+      userPoolId: 'us-east-1_8O2O3UkkF',
+      userPoolClientId: 'vdb2e71v0lovn4dl35sdqjirb',
+      region: 'us-east-1',
+      identityPoolId: 'us-east-1:75179ce4-a70a-412a-97fb-c861cce466ba'
+    }
+  },
+  Storage: {
+    S3: {
+      bucket: 'iknowuploadfinal-storage2eea8-dev',
+      region: 'us-east-1'
+    }
+  }
+});
+
+const theme = createTheme({
+  name: 'in10-theme',
+  tokens: {
+    colors: {
+      brand: {
+        primary: {
+          // Use your primary color and Amplify will generate the scale
+          10: '#520f3010',
+          20: '#520f3020',
+          40: '#520f3040',
+          60: '#520f3060',
+          80: '#520f3080',
+          90: '#520f3090',
+          100: '#520f30', // Your primary color
+        },
+      },
+      background: {
+        primary: { value: '#ffffff' }, // White background
+        secondary: { value: '#f8f9fa' }, // Light gray for secondary areas
+      },
+      font: {
+        interactive: { value: '#520f30' }, // Your primary color for interactive text
+      },
+    },
+    fonts: {
+      default: {
+        variable: { value: 'Inter, sans-serif' }, // Match your app font
+        static: { value: 'Inter, sans-serif' },
+      },
+    },
+    components: {
+      button: {
+        primary: {
+          backgroundColor: { value: '{colors.brand.primary.100}' },
+          _hover: {
+            backgroundColor: { value: '{colors.brand.primary.90}' },
+          },
+        },
+      },
+      authenticator: {
+        modal: {
+          backgroundColor: { value: '{colors.background.primary}' },
+          borderRadius: { value: '8px' },
+          boxShadow: { value: '0 4px 20px rgba(0, 0, 0, 0.15)' },
+        },
+      },
+    },
+  },
+});
+
+// Verify Amplify configuration
+console.log('Amplify Configuration:', Amplify.getConfig());
 
 function App() {
   const [dynamoData, setDynamoData] = useState([])
@@ -219,8 +282,71 @@ function App() {
   )
 }
 
-export default withAuthenticator(App, {
-  signUpAttributes: [
-    'email'
-  ]
+const AuthenticatedApp = withAuthenticator(App, {
+  components: {
+    Header() {
+      return (
+        <div style={{ 
+          textAlign: 'center',
+          padding: '1rem',
+          marginBottom: '1rem'
+        }}>
+          <img 
+            src="./src/images/in10Logo.svg" 
+            alt="in10Logo" 
+            style={{ width: '150px' }}
+          />
+        </div>
+      );
+    },
+    Footer() {
+      return (
+        <div style={{ 
+          textAlign: 'center',
+          padding: '1rem',
+          color: 'var(--tertiary-color)',
+          fontSize: 'var(--small-font-size)'
+        }}>
+          © 2025 IN10
+        </div>
+      );
+    },
+  },
+  formFields: {
+    signIn: {
+      username: {
+        placeholder: 'Enter your username',
+        label: 'Username',
+      },
+      password: {
+        placeholder: 'Enter your password',
+        label: 'Password',
+      },
+    },
+    signUp: {
+      username: {
+        placeholder: 'Enter your username',
+        label: 'Username',
+      },
+      password: {
+        placeholder: 'Create a password',
+        label: 'Password',
+      },
+      confirm_password: {
+        placeholder: 'Confirm your password',
+        label: 'Confirm Password',
+      },
+    },
+  },
+  variation: 'modal',
+  loginMechanisms: ['username'],
+  hideSignUp: true,
 });
+
+export default function ThemedApp() {
+  return (
+    <ThemeProvider theme={theme}>
+      <AuthenticatedApp />
+    </ThemeProvider>
+  );
+}
