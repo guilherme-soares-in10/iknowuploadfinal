@@ -1,0 +1,64 @@
+.uploadCardContainer{
+    background-color: var(--white-color);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    min-width: 386px;
+    max-width: 386px;
+    color: var(--primary-color);
+    font-weight: bold;
+    box-shadow: 10px 10px 10px var(--black-color);
+    }
+    
+    .browseContainer{
+       border: 2px dashed #888;
+       border-radius: 4px;
+       width: 100%;
+       flex: 1;
+       margin: 10px;
+       color: var(--black-color);
+       font-size: var(--small-font-size);
+       font-weight: normal;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       flex-direction: column;
+       text-align: center;
+       flex-wrap: wrap;
+       transition: all 0.3s ease;
+    }
+    
+    .browseContainer:hover {
+       background: #ccc; 
+       font-weight: bold;
+    }
+    
+    .browseContainer label{
+       color: var(--primary-color);
+       text-decoration: none;
+       font-weight: bold;
+    }
+    
+    .browseContainer label:hover{
+       color: var(--tertiary-color);
+       cursor: pointer;
+    }
+    
+    .browseContainer label:active{
+       color: var(--black-color);
+    }
+    
+    .fileNameContainer {
+       width: 100%;
+       text-align: center;
+       font-weight: normal;
+    }
+    
+    .deleteIcon{
+       width: 20px;
+       height: 20px;
+       cursor: pointer;
+    }

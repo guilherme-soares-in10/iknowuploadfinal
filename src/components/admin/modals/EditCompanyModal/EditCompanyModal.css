@@ -112,4 +112,48 @@
 .modal-actions button {
     flex: 1;
     min-width: 0;
+}
+
+.categories-list {
+    margin-top: 10px;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    background-color: #f5f5f5;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.category-id {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.add-category-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.add-category-form input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.add-category-form button {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-category-form button:hover {
+    background-color: var(--primary-color-dark);
 } 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Button from './components/common/Button/Buton'
 import './App.css'
 import AdminDashboard from './components/admin/AdminDashboard/AdminDashboard'
+import CompanyDashboard from './components/company/CompanyDashboard/CompanyDashboard'
 import { Amplify } from 'aws-amplify'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 import { signOut } from '@aws-amplify/auth';
@@ -98,18 +99,23 @@ function App() {
     .catch(error => console.log('error', error));
   }
 
-  const updateDynamoData = async (id, displayName) => {
+  const updateDynamoData = async (id, displayName, categories) => {
     try {
+      console.log('updateDynamoData called with:', { id, displayName, categories });
+      const requestBody = {
+        id: id,
+        displayName: displayName,
+        categories: categories,
+        httpMethod: 'PUT'
+      };
+      console.log('Request body:', JSON.stringify(requestBody));
+      
       const response = await fetch('https://irqns6amh7.execute-api.us-east-1.amazonaws.com/dev/companies', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          id: id,
-          displayName: displayName,
-          httpMethod: 'PUT'  // Add this to ensure the Lambda function recognizes it as a PUT request
-        })
+        body: JSON.stringify(requestBody)
       });
 
       if (!response.ok) {
@@ -141,12 +147,7 @@ function App() {
     var raw = JSON.stringify({
         "companyId": firstName,
         "displayName": lastName,
-        "categories": [
-            {
-                "text": "Upload arquivos plano de mídia",
-                "category": "plano-midia"
-            }
-        ]
+        "categories": []
     });
     
     // Log the data being sent
@@ -206,10 +207,7 @@ function App() {
               updateDynamoData={updateDynamoData}
             />
           ) : (
-            <div>
-              <h2>Company Interface for {userCompany}</h2>
-              {/* Here we'll add the company-specific interface later */}
-            </div>
+            <CompanyDashboard companyData={dynamoData.find(item => item.ID === userCompany)} />
           )}
         </main>
         <footer>

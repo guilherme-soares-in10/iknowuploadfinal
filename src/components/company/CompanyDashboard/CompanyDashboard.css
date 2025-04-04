@@ -1,0 +1,10 @@
+.companyDashboard {
+    padding: 20px;
+}
+
+.uploadCardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}

@@ -17,9 +17,9 @@ const AdminDashboard = ({dynamoData, deleteDynamoData, sendDynamoData, updateDyn
         setSelectedCompany(null);
     };
 
-    const handleUpdate = async (id, displayName) => {
+    const handleUpdate = async (id, displayName, categories) => {
         try {
-            await updateDynamoData(id, displayName);
+            await updateDynamoData(id, displayName, categories);
             setIsModalOpen(false);
             setSelectedCompany(null);
         } catch (error) {

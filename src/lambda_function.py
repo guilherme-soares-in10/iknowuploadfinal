@@ -219,36 +219,53 @@ def lambda_handler(event, context):
         try:
             # Get the request body - it might be in event['body'] or directly in the event
             body = event.get('body', event)
+            print("Raw event:", json.dumps(event))
+            print("Raw body:", body)
+            
             if isinstance(body, str):
                 body = json.loads(body)
-            print("PUT request body:", body)  # Add logging
+            print("Parsed body:", json.dumps(body))
+            
+            # If this is an API Gateway request, the body will be in event['body']
+            if 'body' in event:
+                body = json.loads(event['body'])
+            
+            print("Final body:", json.dumps(body))
             
             # Validate required fields
-            if 'id' not in body or 'displayName' not in body:
+            if 'id' not in body or 'displayName' not in body or 'categories' not in body:
+                print("Missing fields in body:", body)
                 return {
                     'statusCode': 400,
                     'headers': {
                         'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin': '*'
                     },
-                    'body': json.dumps({'error': 'Missing required fields: id and displayName are required'})
+                    'body': json.dumps({'error': 'Missing required fields: id, displayName, and categories are required'})
                 }
             
             # Update the company item
+            print("Updating item with:", {
+                'ID': body['id'],
+                'displayName': body['displayName'],
+                'categories': body['categories']
+            })
+            
             response = table.update_item(
                 Key={
                     'ID': body['id']
                 },
-                UpdateExpression='SET displayName = :displayName',
+                UpdateExpression='SET displayName = :displayName, categories = :categories',
                 ExpressionAttributeValues={
-                    ':displayName': body['displayName']
+                    ':displayName': body['displayName'],
+                    ':categories': body['categories']
                 },
                 ReturnValues='ALL_NEW'
             )
             
-            print("Update response:", response)  # Add logging
+            print("Update response:", response)
             
-            # Convert any Decimal types in the response to regular numbers
+            # Convert Decimal types in the response
             updated_item = convert_decimal_to_number(response.get('Attributes', {}))
             
             return {
@@ -257,10 +274,7 @@ def lambda_handler(event, context):
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 },
-                'body': json.dumps({
-                    'message': f'Successfully updated company: {body["displayName"]}',
-                    'updatedItem': updated_item
-                })
+                'body': json.dumps(updated_item)
             }
         except Exception as e:
             print("Error in PUT handler:", str(e))  # Add logging
