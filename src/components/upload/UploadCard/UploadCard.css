@@ -55,8 +55,14 @@
        width: 100%;
        text-align: center;
        font-weight: normal;
+       word-break: break-all;
+       padding: 10px;
     }
     
+    .icon{
+      margin-top: 10px;
+    }
+
     .deleteIcon{
        width: 20px;
        height: 20px;

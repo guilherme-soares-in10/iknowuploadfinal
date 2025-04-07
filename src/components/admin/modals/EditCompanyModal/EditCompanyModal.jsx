@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './EditCompanyModal.css';
 import Button from '../../../common/Button/Button';
+import '../../../common/Button/Button.css';
 
 const EditCompanyModal = ({ company, onClose, onUpdate }) => {
     const [displayName, setDisplayName] = useState(company.displayName);
@@ -42,10 +43,11 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                     <div className="modal-title">
                         <h2>Edit Company</h2>
                     </div>
-                    <button className="close-button" onClick={onClose}>×</button>
+                    <img className='closeButton' src="public/images/deleteIcon.svg" alt="Close" onClick={onClose}></img>
                 </div>
                 <div className="modal-body">
                     <form onSubmit={handleSubmit}>
+                       <div className="form-group-container">
                         <div className="form-group">
                             <label htmlFor="companyId">Company ID</label>
                             <input
@@ -65,8 +67,9 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                 required
                             />
                         </div>
+                        </div>
                         <div className="form-group">
-                            <label>Categories</label>
+                            <h3>Categories</h3>
                             <div className="add-category-form">
                                 <input
                                     type="text"
@@ -90,8 +93,8 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                             <span className="category-id">({category.category})</span>
                                         </div>
                                         <Button 
+                                            className='cancelButton'
                                             text="Remove" 
-                                            backgroundColor="var(--error-color)"
                                             onClick={(e) => handleRemoveClick(e, index)}
                                         />
                                     </div>
@@ -99,7 +102,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                             </div>
                         </div>
                         <div className="modal-buttons">
-                            <button type="button" style={{backgroundColor: 'var(--error-color)'}} onClick={onClose}>Cancel</button>
+                            <button type="button" className='cancelButton' onClick={onClose}>Cancel</button>
                             <button type="submit">Save Changes</button>
                         </div>
                     </form>

@@ -61,16 +61,16 @@ const AdminDashboard = ({dynamoData, deleteDynamoData, sendDynamoData, updateDyn
           <div className="add-company-form">
             <input
                 type="text"
-                placeholder="Company ID"
-                value={newCompany.id}
-                onChange={(e) => setNewCompany({ ...newCompany, id: e.target.value })}
+                placeholder="Display Name"
+                value={newCompany.displayName}
+                onChange={(e) => setNewCompany({ ...newCompany, displayName: e.target.value })}
                 required
             />
             <input
                 type="text"
-                placeholder="Display Name"
-                value={newCompany.displayName}
-                onChange={(e) => setNewCompany({ ...newCompany, displayName: e.target.value })}
+                placeholder="Company ID"
+                value={newCompany.id}
+                onChange={(e) => setNewCompany({ ...newCompany, id: e.target.value })}
                 required
             />
             <button onClick={handleAddCompany}>Add Company</button>
@@ -86,7 +86,7 @@ const AdminDashboard = ({dynamoData, deleteDynamoData, sendDynamoData, updateDyn
                       <div className='data-item-container'>
                         <h3>{company.displayName}</h3>
                         <div className="button-container">
-                          <Button text='Remove' backgroundColor='var(--error-color)' onClick={() => handleDeleteClick(company)}></Button>
+                          <Button className='cancelButton'   text='Remove' onClick={() => handleDeleteClick(company)}></Button>
                           <Button text='Edit' onClick={() => handleEditClick(company)}></Button>
                         </div>
                       </div>

@@ -1,4 +1,4 @@
-button{
+button {
     background-color: var(--primary-color);
     color: var(--white-color);
     font-size: var(--normal-font-size);
@@ -9,19 +9,15 @@ button{
     height: 60px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    border: none;
 }
 
 button:hover {
     background-color: var(--white-color);
-    color: var(--gray-color);
+    color: var(--primary-color);
     border: 1px solid var(--primary-color); 
 }
-
-button:active {
-    background-color: var(--tertiary-color);
-    color: var(--white-color);
-}   
-
+   
 .signOutButton {
     background-color: var(--secondary-color);
     color: var(--white-color);
@@ -30,4 +26,22 @@ button:active {
     height: 50px;
     margin-top: 20px;
     margin-right: 20px;
+}
+
+.signOutButton:hover {
+    background-color: var(--white-color);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.cancelButton {
+    background-color: var(--error-color);
+    color: var(--white-color);
+    border: 1px solid var(--error-color); 
+}
+
+.cancelButton:hover {
+    background-color: var(--white-color);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }

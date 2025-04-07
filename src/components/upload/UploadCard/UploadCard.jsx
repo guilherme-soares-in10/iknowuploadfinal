@@ -117,7 +117,7 @@ const UploadCard = ({ text, onClick, cardId, fileFormat, companyId }) => {
                 onDrop={handleDrop}
             >
                 <div>
-                    <img src="./src/images/icon.svg" alt="icon" />              
+                    <img className="icon" src="images/icon.svg" alt="icon" />              
                     <p>Drag n Drop here<br />
                     or<br /></p>
                     <input 
@@ -136,7 +136,7 @@ const UploadCard = ({ text, onClick, cardId, fileFormat, companyId }) => {
                     {file && 
                     <div>  
                         <p><em>Selected file: {file.name}</em></p>
-                        <img className="deleteIcon" src="./src/images/deleteIcon.svg" alt="delete" onClick={handleDelete}/>
+                        <img className="deleteIcon" src="/images/deleteIcon.svg" alt="delete" onClick={handleDelete}/>
                     </div>      
                     }
                 </div>

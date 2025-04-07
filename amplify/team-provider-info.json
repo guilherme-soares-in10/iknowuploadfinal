@@ -26,6 +26,12 @@
       },
       "storage": {
         "iknowuploadfinalstorage": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d16lwl8gfcw8cu",
+          "type": "manual"
+        }
       }
     }
   }

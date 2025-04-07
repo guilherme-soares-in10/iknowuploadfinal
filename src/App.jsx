@@ -258,7 +258,7 @@ function App() {
             <Button className="signOutButton" text="Sign out" onClick={handleSignOut}/>            
           </div>
           <div>
-            <img className='in10Logo' src="./src/images/in10Logo.svg" width="200px" alt="in10Logo"/>
+            <img className='in10Logo' src="/images/in10Logo.svg" width="200px" alt="in10Logo"/>
           </div>
         </header>
         <main>
@@ -274,7 +274,7 @@ function App() {
           )}
         </main>
         <footer>
-          <p>© 2025 IN10</p>
+          <p className='footerText'>© 2025 IN10</p>
         </footer>
     </div>   
      
@@ -292,7 +292,7 @@ const AuthenticatedApp = withAuthenticator(App, {
           marginBottom: '1rem'
         }}>
           <img 
-            src="./src/images/in10Logo.svg" 
+            src="/images/in10Logo.svg" 
             alt="in10Logo" 
             style={{ width: '150px' }}
           />
@@ -307,7 +307,7 @@ const AuthenticatedApp = withAuthenticator(App, {
           color: 'var(--tertiary-color)',
           fontSize: 'var(--small-font-size)'
         }}>
-          © 2025 IN10
+          <p>© 2025 IN10</p>
         </div>
       );
     },
