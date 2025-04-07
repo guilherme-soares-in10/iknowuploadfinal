@@ -20,7 +20,7 @@ const DeleteConfirmationModal = ({ company, onClose, onConfirm }) => {
                     <div className="modal-title">
                         <h2>Confirm Deletion</h2>
                     </div>
-                    <button className="close-button" onClick={onClose}>×</button>
+                    <img className='closeButton' src="public/images/deleteIcon.svg" alt="Close" onClick={onClose}></img>
                 </div>
                 <div className="modal-body">
                     <p>Are you sure you want to delete the company "{company.displayName}"?</p>
