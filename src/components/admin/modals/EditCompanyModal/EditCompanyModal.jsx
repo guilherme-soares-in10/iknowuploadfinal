@@ -43,7 +43,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                     <div className="modal-title">
                         <h2>Edit Company</h2>
                     </div>
-                    <img className='closeButton' src="public/images/deleteIcon.svg" alt="Close" onClick={onClose}></img>
+                    <img className='closeButton' src="images/deleteIcon.svg" alt="Close" onClick={onClose}></img>
                 </div>
                 <div className="modal-body">
                     <form onSubmit={handleSubmit}>
