@@ -133,20 +133,20 @@
     font-size: 0.9em;
 }
 
-.add-category-form {
+.add-category-form, .add-user-form {
     display: flex;
     gap: 10px;
     margin-top: 10px;
 }
 
-.add-category-form input {
+.add-category-form input, .add-user-form input {
     flex: 1;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-.add-category-form button {
+.add-category-form button, .add-user-form button {
     padding: 8px 16px;
     background-color: var(--primary-color);
     color: white;
@@ -155,7 +155,7 @@
     cursor: pointer;
 }
 
-.add-category-form button:hover {
+.add-category-form button:hover, .add-user-form button:hover {
     background-color: var(--primary-color-dark);
     color: var(--gray-color);
 } 
@@ -194,6 +194,14 @@
     padding: 10px;
 }
 
+.form-group input:focus{
+    background: #ccc;
+}
+
+.form-group input:disabled{
+    background: #ddd;   
+}
+
 .form-group-container{
     width: 60%;
     display: flex;
@@ -208,3 +216,58 @@
     flex-direction: column;
     justify-content: space-between;
 }
+
+.tab-buttons {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+}
+
+.tab-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    background-color: #aaa;
+}
+
+.tab-buttons button.active {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+.tab-buttons button:hover {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+.users-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.user-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.user-email {
+    color: #666;
+    font-size: 0.9em;
+}
+

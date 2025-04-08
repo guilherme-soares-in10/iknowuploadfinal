@@ -47,13 +47,33 @@ const AdminDashboard = ({dynamoData, deleteDynamoData, sendDynamoData, updateDyn
     };
 
     const handleAddCompany = () => {
-        if (!newCompany.id.trim() || !newCompany.displayName.trim()) {
-            alert('Please fill in both Company ID and Display Name');
-            return;
-        }
-        sendDynamoData(newCompany.id, newCompany.displayName);
-        setNewCompany({ id: '', displayName: '' });
-    };
+      // Check if either field is empty or contains only spaces
+      if (!newCompany.id.trim() || !newCompany.displayName.trim()) {
+          alert('Please fill in both Company ID and Display Name');
+          return;
+      }
+    
+      // Alphanumeric with hyphen, lowercase only regex (letters, numbers, hyphen)
+      const alphanumericWithHyphenLowercaseRegex = /^[a-z0-9-]+$/;
+  
+      // Check if the id contain only lowercase alphanumeric characters or hyphens
+      if (!alphanumericWithHyphenLowercaseRegex.test(newCompany.id)) {
+        alert('Company ID must only contain lowercase alphanumeric characters or hyphens.');
+        return;
+    }
+
+    // Check if the length of company ID or display name exceeds 30 characters
+    if (newCompany.id.length > 30 || newCompany.displayName.length > 30) {
+      alert('Company ID and Display Name must be 30 characters or fewer.');
+      return;
+  }
+
+      // If validation passes, send the data with lowercase inputs
+      sendDynamoData(newCompany.id, newCompany.displayName);
+      
+      // Reset the inputs
+      setNewCompany({ id: '', displayName: '' });
+  };
 
     return (
         <div className="adminDashboardContainer"> 

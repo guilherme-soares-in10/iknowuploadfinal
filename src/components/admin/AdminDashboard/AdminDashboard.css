@@ -46,6 +46,10 @@
     padding: 10px;
 }
 
+.add-company-form input:focus{
+    background: #ccc;
+}
+
 .button-container{
     display: flex;
     flex-direction: row;
