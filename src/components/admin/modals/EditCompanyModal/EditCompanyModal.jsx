@@ -96,6 +96,11 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
             return;
         }
 
+        if (newUser.password.length < 8) {
+            alert('A senha deve conter pelo menos 8 caracteres');
+            return;
+        }
+
         try {
             setLoading(true);
             const cognitoClient = await getCognitoClient();
