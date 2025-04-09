@@ -9,6 +9,7 @@ const AdminDashboard = ({dynamoData, deleteDynamoData, sendDynamoData, updateDyn
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [newCompany, setNewCompany] = useState({ id: '', displayName: '' });
+    const [loading, setLoading] = useState(false);
 
     const handleEditClick = (company) => {
         setSelectedCompany(company);
@@ -46,57 +47,62 @@ const AdminDashboard = ({dynamoData, deleteDynamoData, sendDynamoData, updateDyn
         }
     };
 
-    const handleAddCompany = () => {
-      // Check if either field is empty or contains only spaces
-      if (!newCompany.id.trim() || !newCompany.displayName.trim()) {
-          alert('Please fill in both Company ID and Display Name');
-          return;
-      }
-    
-      // Alphanumeric with hyphen, lowercase only regex (letters, numbers, hyphen)
-      const alphanumericWithHyphenLowercaseRegex = /^[a-z0-9-]+$/;
-  
-      // Check if the id contain only lowercase alphanumeric characters or hyphens
-      if (!alphanumericWithHyphenLowercaseRegex.test(newCompany.id)) {
-        alert('Company ID must only contain lowercase alphanumeric characters or hyphens.');
-        return;
-    }
+    const generateCompanyId = (displayName) => {
+        // Remove accents and special characters, convert to lowercase, and replace spaces with hyphens
+        return displayName
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove accents
+            .replace(/[^a-zA-Z0-9\s]/g, '') // Remove any remaining special characters
+            .toLowerCase()
+            .replace(/\s+/g, '-');
+    };
 
-    // Check if the length of company ID or display name exceeds 30 characters
-    if (newCompany.id.length > 30 || newCompany.displayName.length > 30) {
-      alert('Company ID and Display Name must be 30 characters or fewer.');
-      return;
-  }
-
-      // If validation passes, send the data with lowercase inputs
-      sendDynamoData(newCompany.id, newCompany.displayName);
-      
-      // Reset the inputs
-      setNewCompany({ id: '', displayName: '' });
-  };
+    const handleAddCompany = async (e) => {
+        e.preventDefault();
+        if (newCompany.displayName.trim() === '') {
+            alert('Nome da empresa não pode ser vazio');
+            return;
+        }
+        if (newCompany.displayName.length > 30) {
+            alert('Nome da empresa deve ser menor que 30 caracteres');
+            return;
+        }
+        if (!/^[a-zA-Z0-9\sáàâãéèêíïóôõöúüçÁÀÂÃÉÈÊÍÏÓÔÕÖÚÜÇ]+$/.test(newCompany.displayName)) {
+            alert('Nome da empresa deve conter apenas letras, números e espaços');
+            return;
+        }
+        if (newCompany.displayName.startsWith(' ') || newCompany.displayName.endsWith(' ')) {
+            alert('Nome da empresa não pode começar ou terminar com espaço');
+            return;
+        }
+        try {
+            setLoading(true);
+            const companyId = generateCompanyId(newCompany.displayName);
+            await updateDynamoData(companyId, newCompany.displayName, []);
+            setNewCompany({ displayName: '' });
+            alert('Empresa adicionada com sucesso');
+        } catch (error) {
+            console.error('Error adding company:', error);
+            alert('Falha ao adicionar empresa');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="adminDashboardContainer"> 
-          <h1>Admin Dashboard</h1>
+          <h1>Painel de Controle</h1>
           <div className="add-company-form">
             <input
                 type="text"
-                placeholder="Display Name"
+                placeholder="Nome da Empresa"
                 value={newCompany.displayName}
                 onChange={(e) => setNewCompany({ ...newCompany, displayName: e.target.value })}
-                required
             />
-            <input
-                type="text"
-                placeholder="Company ID"
-                value={newCompany.id}
-                onChange={(e) => setNewCompany({ ...newCompany, id: e.target.value })}
-                required
-            />
-            <button onClick={handleAddCompany}>Add Company</button>
+            <Button text="Adicionar Empresa" onClick={handleAddCompany} />
           </div>
 
-          <h2>Companies</h2>
+          <h2>Empresas</h2>
           <div className="company-management-container">
             <div className="dynamodb-data">
               <div className="data-container">
@@ -106,14 +112,14 @@ const AdminDashboard = ({dynamoData, deleteDynamoData, sendDynamoData, updateDyn
                       <div className='data-item-container'>
                         <h3>{company.displayName}</h3>
                         <div className="button-container">
-                          <Button className='cancelButton'   text='Remove' onClick={() => handleDeleteClick(company)}></Button>
-                          <Button text='Edit' onClick={() => handleEditClick(company)}></Button>
+                          <Button className='cancelButton'   text='Excluir' onClick={() => handleDeleteClick(company)}></Button>
+                          <Button text='Editar' onClick={() => handleEditClick(company)}></Button>
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p>No data loaded yet</p>
+                  <p>Nenhum dado carregado ainda</p>
                 )}
               </div>
             </div>

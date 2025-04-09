@@ -255,7 +255,7 @@ function App() {
             <div className='adminIndicator'>
               {userRole === 'admin' ? 'Admin' : companyDisplayName} 
             </div>
-            <Button className="signOutButton" text="Sign out" onClick={handleSignOut}/>            
+            <Button className="signOutButton" text="Sair" onClick={handleSignOut}/>            
           </div>
           <div>
             <img className='in10Logo' src="/images/in10Logo.svg" width="200px" alt="in10Logo"/>
@@ -315,26 +315,26 @@ const AuthenticatedApp = withAuthenticator(App, {
   formFields: {
     signIn: {
       username: {
-        placeholder: 'Enter your username',
-        label: 'Username',
+        placeholder: 'Nome de usuário',
+        label: 'Nome de usuário',
       },
       password: {
-        placeholder: 'Enter your password',
-        label: 'Password',
+        placeholder: 'Senha',
+        label: 'Senha',
       },
     },
     signUp: {
       username: {
-        placeholder: 'Enter your username',
-        label: 'Username',
+        placeholder: 'Nome de usuário',
+        label: 'Nome de usuário',
       },
       password: {
-        placeholder: 'Create a password',
-        label: 'Password',
+        placeholder: 'Crie uma senha',
+        label: 'Senha',
       },
       confirm_password: {
-        placeholder: 'Confirm your password',
-        label: 'Confirm Password',
+        placeholder: 'Confirme sua senha',
+        label: 'Confirme sua senha',
       },
     },
   },

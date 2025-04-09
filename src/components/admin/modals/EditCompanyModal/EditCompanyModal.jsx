@@ -69,7 +69,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
             }
         } catch (error) {
             console.error('Error fetching users:', error);
-            alert('Failed to fetch users');
+            alert('Falha ao buscar usuários');
         } finally {
             setLoading(false);
         }
@@ -80,29 +80,19 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
         
         // Basic password confirmation validation
         if (newUser.password !== newUser.confirmPassword) {
-            alert('Passwords do not match');
+            alert('As senhas não coincidem');
             return;
         }
 
         // Username and Password validation
         const alphanumericRegex = /^[a-zA-Z0-9]+$/;
-        if (!alphanumericRegex.test(newUser.username)) {
-            alert('Username must contain only letters and numbers');
+        if (!alphanumericRegex.test(newUser.username) || !alphanumericRegex.test(newUser.password)) {
+            alert('O nome de usuário e a senha devem conter apenas letras e números');
             return;
         }
 
-        if (newUser.username.length > 30) {
-            alert('Username must be 30 characters or fewer');
-            return;
-        }
-
-        if (!alphanumericRegex.test(newUser.password)) {
-            alert('Password must contain only letters and numbers');
-            return;
-        }
-
-        if (newUser.password.length > 30) {
-            alert('Password must be 30 characters or fewer');
+        if (newUser.username.length > 30 || newUser.password.length > 30) {
+            alert('O nome de usuário e a senha devem conter 30 caracteres ou menos');
             return;
         }
 
@@ -148,17 +138,17 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                     confirmPassword: ''
                 });
 
-                alert('User created successfully');
+                alert('Usuário criado com sucesso');
             } catch (error) {
                 if (error.name === 'UsernameExistsException') {
-                    alert('Username already exists. Please choose a different username.');
+                    alert('O nome de usuário já existe. Por favor, escolha um nome de usuário diferente.');
                 } else {
                     throw error; // Re-throw other errors to be caught by the outer catch
                 }
             }
         } catch (error) {
             console.error('Error creating user:', error);
-            alert('Failed to create user');
+            alert('Falha ao criar usuário');
         } finally {
             setLoading(false);
         }
@@ -168,49 +158,71 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
         e.preventDefault();
         try {
             // Check if display name is empty or contains only spaces
-            if (!displayName.trim()) {
-                alert('Please fill in the Display Name');
+            if (displayName.trim() === '') {
+                alert('Nome da empresa não pode ser vazio');
+                return;
+            }
+            if (displayName.length > 30) {
+                alert('Nome da empresa deve ser menor que 30 caracteres');
+                return;
+            }
+            if (!/^[a-zA-Z0-9\sáàâãéèêíïóôõöúüçÁÀÂÃÉÈÊÍÏÓÔÕÖÚÜÇ]+$/.test(displayName)) {
+                alert('Nome da empresa deve conter apenas letras, números e espaços');
+                return;
+            }
+            if (displayName.startsWith(' ') || displayName.endsWith(' ')) {
+                alert('Nome da empresa não pode começar ou terminar com espaço');
                 return;
             }
 
-            // Check if display name exceeds 30 characters
-            if (displayName.length > 30) {
-                alert('Display Name must be 30 characters or fewer.');
-                return;
-            }
 
             console.log('Submitting with categories:', categories);
             await onUpdate(company.ID, displayName, categories);
         } catch (error) {
             console.error('Error updating company:', error);
-            alert('Failed to update company. Please try again.');
+            alert('Falha ao atualizar a empresa. Por favor, tente novamente.');
         }
     };
 
+    const formatCategoryId = (category) => {
+        // Remove accents and special characters, convert to lowercase, and replace spaces with hyphens
+        return category
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove accents
+            .replace(/[^a-zA-Z0-9\s]/g, '') // Remove any remaining special characters
+            .toLowerCase()
+            .replace(/\s+/g, '-');
+    };
+
     const handleAddCategory = () => {
-        // Check if either field is empty or contains only spaces
-        if (!newCategory.text.trim() || !newCategory.category.trim()) {
-            alert('Please fill in both Category Text and Category ID');
+        // Check if field is empty or contains only spaces
+        if (!newCategory.text.trim()) {
+            alert('Categoria de Arquivo não pode ser vazia');
             return;
         }
 
-        // Alphanumeric with hyphen, lowercase only regex (letters, numbers, hyphen)
-        const alphanumericWithHyphenLowercaseRegex = /^[a-z0-9-]+$/;
-
-        // Check if the category ID contain only lowercase alphanumeric characters or hyphens
-        if (!alphanumericWithHyphenLowercaseRegex.test(newCategory.category)) {
-            alert('Category ID must only contain lowercase alphanumeric characters or hyphens.');
+        // Check if the length of category text exceeds 30 characters
+        if (newCategory.text.length > 30) {
+            alert('Categoria de Arquivo deve ser menor que 30 caracteres');
+            return;
+        }
+        
+        if (!/^[a-zA-Z0-9\sáàâãéèêíïóôõöúüçÁÀÂÃÉÈÊÍÏÓÔÕÖÚÜÇ]+$/.test(newCategory.text)) {
+            alert('Categoria de Arquivo deve conter apenas letras, números e espaços');
             return;
         }
 
-        // Check if the length of category text or category ID exceeds 30 characters
-        if (newCategory.text.length > 30 || newCategory.category.length > 30) {
-            alert('Category Text and Category ID must be 30 characters or fewer.');
+        if (newCategory.text.startsWith(' ') || newCategory.text.endsWith(' ')) {
+            alert('Categoria de Arquivo não pode começar ou terminar com espaço');
             return;
         }
 
-        if (newCategory.text && newCategory.category) {
-            setCategories([...categories, newCategory]);
+        if (newCategory.text) {
+            const formattedCategory = {
+                text: newCategory.text,
+                category: formatCategoryId(newCategory.text)
+            };
+            setCategories([...categories, formattedCategory]);
             setNewCategory({ text: '', category: '' });
         }
     };
@@ -226,7 +238,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
     };
 
     const handleRemoveUser = async (username) => {
-        if (!window.confirm(`Are you sure you want to remove user ${username}?`)) {
+        if (!window.confirm(`Tem certeza que deseja excluir o usuário ${username}?`)) {
             return;
         }
 
@@ -244,10 +256,10 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
 
             // Refresh users list
             await fetchUsers();
-            alert('User removed successfully');
+            alert('Usuário excluído com sucesso');
         } catch (error) {
             console.error('Error removing user:', error);
-            alert('Failed to remove user');
+            alert('Falha ao excluir usuário');
         } finally {
             setLoading(false);
         }
@@ -258,7 +270,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
             <div className="modal-content">
                 <div className="modal-header">
                     <div className="modal-title">
-                        <h2>Edit Company</h2>
+                        <h2>Editar Empresa</h2>
                     </div>
                     <img className='closeButton' src="images/deleteIcon.svg" alt="Close" onClick={onClose}></img>
                 </div>
@@ -266,7 +278,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                     <form onSubmit={handleSubmit}>
                         <div className="form-group-container">
                             <div className="form-group">
-                                <label htmlFor="companyId">Company ID</label>
+                                <label htmlFor="companyId">ID da Empresa</label>
                                 <input
                                     type="text"
                                     id="companyId"
@@ -275,7 +287,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="displayName">Display Name</label>
+                                <label htmlFor="displayName">Nome da Empresa</label>
                                 <input
                                     type="text"
                                     id="displayName"
@@ -292,14 +304,14 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                     className={activeTab === 'categories' ? 'active' : ''}
                                     onClick={() => setActiveTab('categories')}
                                 >
-                                    Categories
+                                    Categorias
                                 </button>
                                 <button 
                                     type="button"
                                     className={activeTab === 'users' ? 'active' : ''}
                                     onClick={() => setActiveTab('users')}
                                 >
-                                    Users
+                                    Usuários
                                 </button>
                             </div>
                             
@@ -308,17 +320,11 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                     <div className="add-category-form">
                                         <input
                                             type="text"
-                                            placeholder="Category Text"
+                                            placeholder="Categoria de Arquivo"
                                             value={newCategory.text}
                                             onChange={(e) => setNewCategory({ ...newCategory, text: e.target.value })}
                                         />
-                                        <input
-                                            type="text"
-                                            placeholder="Category ID"
-                                            value={newCategory.category}
-                                            onChange={(e) => setNewCategory({ ...newCategory, category: e.target.value })}
-                                        />
-                                        <button type="button" onClick={handleAddCategory}>Add Category</button>
+                                        <button type="button" onClick={handleAddCategory}>Adicionar Categoria</button>
                                     </div>
                                     <div className="categories-list">
                                         {categories.map((category, index) => (
@@ -329,7 +335,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                                 </div>
                                                 <Button 
                                                     className='cancelButton'
-                                                    text="Remove" 
+                                                    text="Excluir" 
                                                     onClick={(e) => handleRemoveClick(e, index)}
                                                 />
                                             </div>
@@ -341,26 +347,26 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                     <div className="add-user-form">
                                         <input
                                             type="text"
-                                            placeholder="Username"
+                                            placeholder="Nome de Usuário"
                                             value={newUser.username}
                                             onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                                         />
                                         <input
                                             type="password"
-                                            placeholder="Password"
+                                            placeholder="Senha"
                                             value={newUser.password}
                                             onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
                                         />
                                         <input
                                             type="password"
-                                            placeholder="Password confirmation"
+                                            placeholder="Confirmação de Senha"
                                             value={newUser.confirmPassword}
                                             onChange={(e) => setNewUser({ ...newUser, confirmPassword: e.target.value })}
                                         />
-                                        <button onClick={handleAddUser}>Add user</button>
+                                        <button onClick={handleAddUser}>Adicionar Usuário</button>
                                     </div>
                                     {loading ? (
-                                        <p>Loading users...</p>
+                                        <p>Carregando usuários...</p>
                                     ) : users.length > 0 ? (
                                         <div className="users-grid">
                                             {users.map((user) => (
@@ -373,21 +379,21 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                                     </div>
                                                     <Button 
                                                         className='cancelButton'
-                                                        text="Remove" 
+                                                        text="Excluir" 
                                                         onClick={() => handleRemoveUser(user.Username)}
                                                     />
                                                 </div>
                                             ))}
                                         </div>
                                     ) : (
-                                        <p>No users found for this company</p>
+                                        <p>Nenhum usuário encontrado para esta empresa</p>
                                     )}
                                 </div>
                             )}
                         </div>
                         <div className="modal-buttons">
-                            <button type="button" className='cancelButton' onClick={onClose}>Cancel</button>
-                            <button type="submit">Save Changes</button>
+                            <button type="button" className='cancelButton' onClick={onClose}>Cancelar</button>
+                            <button type="submit">Salvar Alterações</button>
                         </div>
                     </form>
                 </div>

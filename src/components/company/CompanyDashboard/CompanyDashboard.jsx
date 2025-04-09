@@ -10,7 +10,7 @@ const CompanyDashboard = ({ companyData }) => {
 
     return (
         <div className="companyDashboard">
-            <h2>Upload Files</h2>
+            <h2>Envio de Arquivos</h2>
             <div className="uploadCardsContainer">
                 {companyData?.categories?.map((category, index) => (
                     <UploadCard 

@@ -94,10 +94,10 @@ const UploadCard = ({ text, onClick, cardId, fileFormat, companyId }) => {
             console.log('Upload result:', result);
             setFile(null);
             setUploadProgress(0);
-            alert('File uploaded successfully!');
+            alert('Arquivo enviado com sucesso!');
         } catch (error) {
             console.error('Upload error:', error);
-            alert(`Upload failed: ${error.message}`);
+            alert(`Envio falhou: ${error.message}`);
         } finally {
             setIsUploading(false);
         }
@@ -118,8 +118,8 @@ const UploadCard = ({ text, onClick, cardId, fileFormat, companyId }) => {
             >
                 <div>
                     <img className="icon" src="images/icon.svg" alt="icon" />              
-                    <p>Drag n Drop here<br />
-                    or<br /></p>
+                    <p>Arraste e solte aqui<br />
+                    ou<br /></p>
                     <input 
                         type="file" 
                         id={cardId}
@@ -129,13 +129,13 @@ const UploadCard = ({ text, onClick, cardId, fileFormat, companyId }) => {
                         accept={fileFormat}
                     />
                     <label htmlFor={cardId}>
-                        Browse
+                        Buscar arquivo
                     </label>  
                 </div>          
                 <div className="fileNameContainer">
                     {file && 
                     <div>  
-                        <p><em>Selected file: {file.name}</em></p>
+                        <p><em>Arquivo selecionado: {file.name}</em></p>
                         <img className="deleteIcon" src="/images/deleteIcon.svg" alt="delete" onClick={handleDelete}/>
                     </div>      
                     }
@@ -150,7 +150,7 @@ const UploadCard = ({ text, onClick, cardId, fileFormat, companyId }) => {
                 </div>
             )}
             <Button 
-                text={isUploading ? 'Uploading...' : 'Upload now'} 
+                text={isUploading ? 'Enviando...' : 'Enviar agora'} 
                 onClick={handleUpload}
                 disabled={!file || isUploading}
             ></Button>

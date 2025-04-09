@@ -29,45 +29,35 @@ def lambda_handler(event, context):
     http_method = event.get('httpMethod', '')
     print("HTTP method:", http_method)
 
+    # Common response headers
+    headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+    }
+
     # Check if this is a DELETE request by looking at the event structure
     if http_method == 'DELETE' or ('id' in event and 'httpMethod' not in event and 'displayName' not in event):
-        # This is a DELETE request
         try:
-            # Get the ID of the company to delete
             company_id = event.get('id')
             
             if not company_id:
                 return {
                     'statusCode': 400,
-                    'headers': {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
+                    'headers': headers,
                     'body': json.dumps({'error': 'Company ID is required for deletion'})
                 }
             
-            # Delete the company from DynamoDB
-            response = table.delete_item(
-                Key={
-                    'ID': company_id
-                }
-            )
+            table.delete_item(Key={'ID': company_id})
             
             return {
                 'statusCode': 200,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'message': f'Successfully deleted company with ID: {company_id}'})
             }
         except Exception as e:
             return {
                 'statusCode': 500,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'error': str(e)})
             }
     
@@ -76,10 +66,8 @@ def lambda_handler(event, context):
         # If event has company data, treat as POST
         if 'companyId' in event and 'displayName' in event and 'categories' in event:
             try:
-                # Get current timestamp
                 timestamp = int(time.time())
                 
-                # Create the company item
                 response = table.put_item(
                     Item={
                         'ID': event['companyId'],
@@ -91,103 +79,68 @@ def lambda_handler(event, context):
                 
                 return {
                     'statusCode': 200,
-                    'headers': {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
+                    'headers': headers,
                     'body': json.dumps({'message': f'Successfully created company: {event["displayName"]}'})
                 }
             except Exception as e:
                 return {
                     'statusCode': 500,
-                    'headers': {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
+                    'headers': headers,
                     'body': json.dumps({'error': str(e)})
                 }
         # If no company data, treat as GET
         else:
             try:
-                # Scan the DynamoDB table
                 response = table.scan()
                 items = response.get('Items', [])
-                
-                # Convert Decimal types to regular numbers
                 items = convert_decimal_to_number(items)
-                
-                # Sort items by createdAt timestamp
                 items.sort(key=lambda x: x.get('createdAt', 0))
                 
                 return {
                     'statusCode': 200,
-                    'headers': {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
+                    'headers': headers,
                     'body': json.dumps(items)
                 }
             except Exception as e:
                 return {
                     'statusCode': 500,
-                    'headers': {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
+                    'headers': headers,
                     'body': json.dumps({'error': str(e)})
                 }
     
     # Handle API Gateway requests
     elif http_method == 'GET':
         try:
-            # Scan the DynamoDB table
             response = table.scan()
             items = response.get('Items', [])
-            
-            # Convert Decimal types to regular numbers
             items = convert_decimal_to_number(items)
-            
-            # Sort items by createdAt timestamp
             items.sort(key=lambda x: x.get('createdAt', 0))
             
             return {
                 'statusCode': 200,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': headers,
                 'body': json.dumps(items)
             }
         except Exception as e:
             return {
                 'statusCode': 500,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'error': str(e)})
             }
     
     elif http_method == 'POST':
         try:
-            # Parse the JSON string from the event body
             body = json.loads(event['body'])
             
-            # Validate required fields
             if 'companyId' not in body or 'displayName' not in body or 'categories' not in body:
                 return {
                     'statusCode': 400,
-                    'headers': {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
+                    'headers': headers,
                     'body': json.dumps({'error': 'Missing required fields: companyId, displayName, and categories are required'})
                 }
             
-            # Get current timestamp
             timestamp = int(time.time())
             
-            # Create the company item
             response = table.put_item(
                 Item={
                     'ID': body['companyId'],
@@ -199,25 +152,18 @@ def lambda_handler(event, context):
             
             return {
                 'statusCode': 200,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'message': f'Successfully created company: {body["displayName"]}'})
             }
         except Exception as e:
             return {
                 'statusCode': 500,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'error': str(e)})
             }
     
     elif http_method == 'PUT':
         try:
-            # Get the request body - it might be in event['body'] or directly in the event
             body = event.get('body', event)
             print("Raw event:", json.dumps(event))
             print("Raw body:", body)
@@ -226,25 +172,19 @@ def lambda_handler(event, context):
                 body = json.loads(body)
             print("Parsed body:", json.dumps(body))
             
-            # If this is an API Gateway request, the body will be in event['body']
             if 'body' in event:
                 body = json.loads(event['body'])
             
             print("Final body:", json.dumps(body))
             
-            # Validate required fields
             if 'id' not in body or 'displayName' not in body or 'categories' not in body:
                 print("Missing fields in body:", body)
                 return {
                     'statusCode': 400,
-                    'headers': {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
+                    'headers': headers,
                     'body': json.dumps({'error': 'Missing required fields: id, displayName, and categories are required'})
                 }
             
-            # Update the company item
             print("Updating item with:", {
                 'ID': body['id'],
                 'displayName': body['displayName'],
@@ -252,9 +192,7 @@ def lambda_handler(event, context):
             })
             
             response = table.update_item(
-                Key={
-                    'ID': body['id']
-                },
+                Key={'ID': body['id']},
                 UpdateExpression='SET displayName = :displayName, categories = :categories',
                 ExpressionAttributeValues={
                     ':displayName': body['displayName'],
@@ -265,35 +203,24 @@ def lambda_handler(event, context):
             
             print("Update response:", response)
             
-            # Convert Decimal types in the response
             updated_item = convert_decimal_to_number(response.get('Attributes', {}))
             
             return {
                 'statusCode': 200,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': headers,
                 'body': json.dumps(updated_item)
             }
         except Exception as e:
-            print("Error in PUT handler:", str(e))  # Add logging
+            print("Error in PUT handler:", str(e))
             return {
                 'statusCode': 500,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': headers,
                 'body': json.dumps({'error': str(e)})
             }
     
-    # Handle unsupported methods
     else:
         return {
             'statusCode': 405,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
+            'headers': headers,
             'body': json.dumps({'error': 'Method not allowed'})
         }
