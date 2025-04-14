@@ -1,37 +1,30 @@
 {
-  "dev": {
+  "prod": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-iknowuploadfinal-dev-2eea8-authRole",
-      "UnauthRoleArn": "arn:aws:iam::598442875435:role/amplify-iknowuploadfinal-dev-2eea8-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::598442875435:role/amplify-iknowuploadfinal-dev-2eea8-authRole",
+      "AuthRoleName": "amplify-iknowuploadfinalprod-prod-5c9c4-authRole",
+      "UnauthRoleArn": "arn:aws:iam::912485910737:role/amplify-iknowuploadfinalprod-prod-5c9c4-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::912485910737:role/amplify-iknowuploadfinalprod-prod-5c9c4-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-iknowuploadfinal-dev-2eea8-deployment",
-      "UnauthRoleName": "amplify-iknowuploadfinal-dev-2eea8-unauthRole",
-      "StackName": "amplify-iknowuploadfinal-dev-2eea8",
-      "StackId": "arn:aws:cloudformation:us-east-1:598442875435:stack/amplify-iknowuploadfinal-dev-2eea8/ac9d4c80-10aa-11f0-8b72-12d2e14b57f3",
-      "AmplifyAppId": "d16lwl8gfcw8cu",
-      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-iknowuploadfinal-dev-2eea8-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+      "DeploymentBucketName": "amplify-iknowuploadfinalprod-prod-5c9c4-deployment",
+      "UnauthRoleName": "amplify-iknowuploadfinalprod-prod-5c9c4-unauthRole",
+      "StackName": "amplify-iknowuploadfinalprod-prod-5c9c4",
+      "StackId": "arn:aws:cloudformation:us-east-1:912485910737:stack/amplify-iknowuploadfinalprod-prod-5c9c4/144bd470-163f-11f0-a85f-0afffb57140d",
+      "AmplifyAppId": "drfaww22oktda",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-iknowuploadfinalprod-prod-5c9c4-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "iknowuploadfinal484d5280": {},
-        "userPoolGroups": {}
+        "iknowuploadfinalprod7c5f07a0": {}
       },
       "function": {
-        "iknowuploadfinal484d5280PostConfirmation": {
-          "GROUP": "admin",
-          "deploymentBucketName": "amplify-iknowuploadfinal-dev-2eea8-deployment",
-          "s3Key": "amplify-builds/iknowuploadfinal484d5280PostConfirmation-7a6e4d79525453577068-build.zip"
+        "iknowuploadfinalprod7c5f07a0PostConfirmation": {
+          "GROUP": "Admin",
+          "deploymentBucketName": "amplify-iknowuploadfinalprod-prod-5c9c4-deployment",
+          "s3Key": "amplify-builds/iknowuploadfinalprod7c5f07a0PostConfirmation-554a4e4477463835496d-build.zip"
         }
       },
       "storage": {
-        "iknowuploadfinalstorage": {}
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d16lwl8gfcw8cu",
-          "type": "manual"
-        }
+        "iknowuploadfinalprodstorage": {}
       }
     }
   }

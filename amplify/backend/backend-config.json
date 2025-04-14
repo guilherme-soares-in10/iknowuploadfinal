@@ -1,6 +1,6 @@
 {
   "auth": {
-    "iknowuploadfinal484d5280": {
+    "iknowuploadfinalprod7c5f07a0": {
       "customAuth": false,
       "dependsOn": [
         {
@@ -9,7 +9,7 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "iknowuploadfinal484d5280PostConfirmation",
+          "resourceName": "iknowuploadfinalprod7c5f07a0PostConfirmation",
           "triggerProvider": "Cognito"
         }
       ],
@@ -33,98 +33,44 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
-    },
-    "userPoolGroups": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "iknowuploadfinal484d5280"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito-UserPool-Groups"
     }
   },
   "function": {
-    "iknowuploadfinal484d5280PostConfirmation": {
+    "iknowuploadfinalprod7c5f07a0PostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
-  "hosting": {
-    "amplifyhosting": {
-      "providerPlugin": "awscloudformation",
-      "service": "amplifyhosting",
-      "type": "manual"
-    }
-  },
   "parameters": {
-    "AMPLIFY_function_iknowuploadfinal484d5280PostConfirmation_GROUP": {
+    "AMPLIFY_function_iknowuploadfinalprod7c5f07a0PostConfirmation_GROUP": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "iknowuploadfinal484d5280PostConfirmation"
+          "resourceName": "iknowuploadfinalprod7c5f07a0PostConfirmation"
         }
       ]
     },
-    "AMPLIFY_function_iknowuploadfinal484d5280PostConfirmation_deploymentBucketName": {
+    "AMPLIFY_function_iknowuploadfinalprod7c5f07a0PostConfirmation_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "iknowuploadfinal484d5280PostConfirmation"
+          "resourceName": "iknowuploadfinalprod7c5f07a0PostConfirmation"
         }
       ]
     },
-    "AMPLIFY_function_iknowuploadfinal484d5280PostConfirmation_s3Key": {
+    "AMPLIFY_function_iknowuploadfinalprod7c5f07a0PostConfirmation_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "iknowuploadfinal484d5280PostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_hosting_amplifyhosting_appId": {
-      "usedBy": [
-        {
-          "category": "hosting",
-          "resourceName": "amplifyhosting"
-        }
-      ]
-    },
-    "AMPLIFY_hosting_amplifyhosting_type": {
-      "usedBy": [
-        {
-          "category": "hosting",
-          "resourceName": "amplifyhosting"
+          "resourceName": "iknowuploadfinalprod7c5f07a0PostConfirmation"
         }
       ]
     }
   },
   "storage": {
-    "iknowuploadfinalstorage": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "iknowuploadfinal484d5280"
-        },
-        {
-          "attributes": [
-            "companyGroupRole"
-          ],
-          "category": "auth",
-          "resourceName": "userPoolGroups"
-        }
-      ],
+    "iknowuploadfinalprodstorage": {
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
     }

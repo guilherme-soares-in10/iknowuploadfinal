@@ -45,7 +45,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
             
             // List all users and filter on client side
             const command = new ListUsersCommand({
-                UserPoolId: 'us-east-1_8O2O3UkkF',
+                UserPoolId: 'us-east-1_ajpjAeVga',
                 Limit: 60
             });
 
@@ -107,7 +107,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
 
             // Create the user
             const createUserCommand = new AdminCreateUserCommand({
-                UserPoolId: 'us-east-1_8O2O3UkkF',
+                UserPoolId: 'us-east-1_ajpjAeVga',
                 Username: newUser.username,
                 TemporaryPassword: newUser.password,
                 UserAttributes: [
@@ -125,7 +125,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
 
                 // Add user to company group
                 const addToGroupCommand = new AdminAddUserToGroupCommand({
-                    UserPoolId: 'us-east-1_8O2O3UkkF',
+                    UserPoolId: 'us-east-1_ajpjAeVga',
                     Username: newUser.username,
                     GroupName: 'company'
                 });
@@ -252,7 +252,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
             const cognitoClient = await getCognitoClient();
 
             const deleteUserCommand = new AdminDeleteUserCommand({
-                UserPoolId: 'us-east-1_8O2O3UkkF',
+                UserPoolId: 'us-east-1_ajpjAeVga',
                 Username: username
             });
 

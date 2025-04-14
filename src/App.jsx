@@ -14,15 +14,15 @@ import '@aws-amplify/ui-react/styles.css'
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolId: 'us-east-1_8O2O3UkkF',
-      userPoolClientId: 'vdb2e71v0lovn4dl35sdqjirb',
+      userPoolId: 'us-east-1_ajpjAeVga',
+      userPoolClientId: '1f9p7egjkp7m8pgqsad85atjfu',
       region: 'us-east-1',
-      identityPoolId: 'us-east-1:75179ce4-a70a-412a-97fb-c861cce466ba'
+      identityPoolId: 'us-east-1:7f97e4a4-cb6c-485f-afc7-a8d1c2bd1b10'
     }
   },
   Storage: {
     S3: {
-      bucket: 'iknowuploadfinal-storage2eea8-dev',
+      bucket: 'iknowuploadfinalprodstorage5c9c4-prod',
       region: 'us-east-1'
     }
   }
@@ -127,7 +127,7 @@ function App() {
 
   // Function to fetch DynamoDB data
   const fetchDynamoData = () => {
-    fetch("https://irqns6amh7.execute-api.us-east-1.amazonaws.com/dev/companies", {
+    fetch("https://7rzhr29z73.execute-api.us-east-1.amazonaws.com/prod/companies", {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -144,7 +144,7 @@ function App() {
 
   const deleteDynamoData = (id) => {
     console.log('Attempting to delete company with ID:', id);
-    fetch("https://irqns6amh7.execute-api.us-east-1.amazonaws.com/dev/companies", {
+    fetch("https://7rzhr29z73.execute-api.us-east-1.amazonaws.com/prod/companies", {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -173,7 +173,7 @@ function App() {
       };
       console.log('Request body:', JSON.stringify(requestBody));
       
-      const response = await fetch('https://irqns6amh7.execute-api.us-east-1.amazonaws.com/dev/companies', {
+      const response = await fetch('https://7rzhr29z73.execute-api.us-east-1.amazonaws.com/prod/companies', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -224,7 +224,7 @@ function App() {
         redirect: 'follow'
     };
     // make API call with parameters and use promises to get response
-    fetch("https://irqns6amh7.execute-api.us-east-1.amazonaws.com/dev/companies", requestOptions)
+    fetch("https://7rzhr29z73.execute-api.us-east-1.amazonaws.com/prod/companies", requestOptions)
     .then(response => response.text())
     .then(result => {
         console.log('API Response:', result);

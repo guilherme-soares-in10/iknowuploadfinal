@@ -3,14 +3,14 @@
   "modules": [
     "add-to-group"
   ],
-  "parentResource": "iknowuploadfinal484d5280",
-  "functionName": "iknowuploadfinal484d5280PostConfirmation",
-  "resourceName": "iknowuploadfinal484d5280PostConfirmation",
+  "parentResource": "iknowuploadfinalprod7c5f07a0",
+  "functionName": "iknowuploadfinalprod7c5f07a0PostConfirmation",
+  "resourceName": "iknowuploadfinalprod7c5f07a0PostConfirmation",
   "parentStack": "auth",
   "triggerEnvs": "[]",
   "triggerDir": "/snapshot/amplify-cli/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PostConfirmation",
   "triggerTemplate": "PostConfirmation.json.ejs",
   "triggerEventPath": "PostConfirmation.event.json",
-  "roleName": "iknowuploadfinal484d5280PostConfirmation",
+  "roleName": "iknowuploadfinalprod7c5f07a0PostConfirmation",
   "skipEdit": true
 }

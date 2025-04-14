@@ -67,12 +67,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "iknowuploadfinal484d5280PostConfirmation",
+            "iknowuploadfinalprod7c5f07a0PostConfirmation",
             {
               "Fn::Join": [
                 "",
                 [
-                  "iknowuploadfinal484d5280PostConfirmation",
+                  "iknowuploadfinalprod7c5f07a0PostConfirmation",
                   "-",
                   {
                     "Ref": "env"
@@ -122,12 +122,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "iknowuploadfinal484d5280PostConfirmation",
+            "iknowuploadfinalprod7c5f07a0PostConfirmation",
             {
               "Fn::Join": [
                 "",
                 [
-                  "iknowuploadfinal484d5280PostConfirmation",
+                  "iknowuploadfinalprod7c5f07a0PostConfirmation",
                   "-",
                   {
                     "Ref": "env"

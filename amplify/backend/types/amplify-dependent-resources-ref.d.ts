@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
   "auth": {
-    "iknowuploadfinal484d5280": {
+    "iknowuploadfinalprod7c5f07a0": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -8,13 +8,10 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolArn": "string",
       "UserPoolId": "string",
       "UserPoolName": "string"
-    },
-    "userPoolGroups": {
-      "companyGroupRole": "string"
     }
   },
   "function": {
-    "iknowuploadfinal484d5280PostConfirmation": {
+    "iknowuploadfinalprod7c5f07a0PostConfirmation": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
@@ -23,7 +20,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "iknowuploadfinalstorage": {
+    "iknowuploadfinalprodstorage": {
       "BucketName": "string",
       "Region": "string"
     }

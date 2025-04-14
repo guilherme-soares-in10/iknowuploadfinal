@@ -1,0 +1,12 @@
+{
+  "resourceName": "iknowuploadfinalprodstorage",
+  "policyUUID": "d7772d08",
+  "bucketName": "iknowuploadfinalprodstorage",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
