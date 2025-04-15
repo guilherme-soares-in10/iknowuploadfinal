@@ -8,6 +8,7 @@ import { withAuthenticator, ThemeProvider, createTheme } from '@aws-amplify/ui-r
 import { signOut } from '@aws-amplify/auth';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import '@aws-amplify/ui-react/styles.css'
+import Support from './components/support/Support'
 
 
 // Configure Amplify
@@ -86,6 +87,7 @@ function App() {
   const [userRole, setUserRole] = useState(null)
   const [userCompany, setUserCompany] = useState(null)
   const [companyDisplayName, setCompanyDisplayName] = useState(null)
+  const [showSupport, setShowSupport] = useState(false)
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -269,11 +271,19 @@ function App() {
               sendDynamoData={sendDynamoData}
               updateDynamoData={updateDynamoData}
             />
+          ) : showSupport ? (
+            <Support onClose={() => setShowSupport(false)} />
           ) : (
             <CompanyDashboard companyData={dynamoData.find(item => item.ID === userCompany)} />
           )}
         </main>
         <footer>
+          {userRole !== 'admin' && (
+            <div className="supportContainer" onClick={() => setShowSupport(!showSupport)}>
+              <img src="/images/help-circle.svg" alt="support" />
+              <p>Suporte</p>
+            </div>
+          )}
           <p className='footerText'>© 2025 IN10</p>
         </footer>
     </div>   

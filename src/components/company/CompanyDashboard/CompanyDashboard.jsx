@@ -1,7 +1,7 @@
 import React from 'react';
 import UploadCard from '../../upload/UploadCard/UploadCard';
 import './CompanyDashboard.css';
-
+import Support from '../../support/Support';
 const CompanyDashboard = ({ companyData }) => {
     const handleUpload = (file) => {
         console.log('File to upload:', file);
