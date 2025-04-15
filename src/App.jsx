@@ -10,6 +10,66 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import '@aws-amplify/ui-react/styles.css'
 import Support from './components/support/Support'
 
+// Configure I18n
+import { I18n } from 'aws-amplify/utils';
+import { translations } from '@aws-amplify/ui-react';
+
+// Define custom translations
+const customTranslations = {
+  pt: {
+    'Sign In': 'Entrar',
+    'Sign Up': 'Cadastrar',
+    'Sign Out': 'Sair',
+    'Forgot your password?': 'Esqueceu sua senha?',
+    'Reset Password': 'Redefinir senha',
+    'Username': 'Nome de usuário',
+    'Password': 'Senha',
+    'Email': 'E-mail',
+    'Phone Number': 'Número de telefone',
+    'Confirm Password': 'Confirmar senha',
+    'Create Account': 'Criar conta',
+    'Have an account?': 'Já tem uma conta?',
+    'No account?': 'Não tem uma conta?',
+    'Sign in to your account': 'Entre na sua conta',
+    'Create a new account': 'Crie uma nova conta',
+    'Reset your password': 'Redefina sua senha',
+    'Enter your username': 'Digite seu nome de usuário',
+    'Enter your password': 'Digite sua senha',
+    'Enter your email': 'Digite seu e-mail',
+    'Enter your phone number': 'Digite seu número de telefone',
+    'Enter your confirmation code': 'Digite seu código de confirmação',
+    'Send code': 'Enviar código',
+    'Confirm': 'Confirmar',
+    'Back to Sign In': 'Voltar para Entrar',
+    'Invalid username or password': 'Nome de usuário ou senha inválidos',
+    'User does not exist': 'Usuário não existe',
+    'User already exists': 'Usuário já existe',
+    'Incorrect username or password': 'Nome de usuário ou senha incorretos',
+    'Invalid password format': 'Formato de senha inválido',
+    'Invalid email format': 'Formato de e-mail inválido',
+    'Invalid phone number format': 'Formato de número de telefone inválido',
+    'Passwords do not match': 'As senhas não coincidem',
+    'Password must be at least 8 characters': 'A senha deve ter pelo menos 8 caracteres',
+    'Password must contain at least one number': 'A senha deve conter pelo menos um número',
+    'Password must contain at least one special character': 'A senha deve conter pelo menos um caractere especial',
+    'Password must contain at least one uppercase letter': 'A senha deve conter pelo menos uma letra maiúscula',
+    'Password must contain at least one lowercase letter': 'A senha deve conter pelo menos uma letra minúscula',
+    'username is required to signIn': 'Nome de usuário é obrigatório para entrar',
+    'password is required to signIn': 'Senha é obrigatória para entrar',
+    'User does not exist.': 'Usuário não existe.',
+    'Incorrect username or password.': 'Nome de usuário ou senha incorretos.',
+    'Cannot reset password for the user as there is no registered/verified email or phone_number': 'Não é possível redefinir a senha para o usuário, pois não há um e-mail ou número de telefone registrado/verificado.',
+    'Username cannot be empty': 'O nome de usuário não pode estar vazio.',
+    'Username/client id combination not found.': 'Combinação de nome de usuário/ID do cliente não encontrada.',
+    'Password must have at least 8 characters': 'A senha deve ter pelo menos 8 caracteres.',
+    'Invalid verification code provided, please try again.': 'Código de verificação inválido, por favor, tente novamente.',
+  }
+};
+
+// Configure I18n with both default and custom translations
+I18n.putVocabularies(translations);
+I18n.putVocabularies(customTranslations);
+I18n.setLanguage('pt');
 
 // Configure Amplify
 Amplify.configure({
@@ -77,6 +137,20 @@ const theme = createTheme({
       },
     },
   },
+  overrides: [
+    {
+      colorMode: 'light',
+      tokens: {
+        colors: {
+          font: {
+            primary: { value: '#520f30' },
+            secondary: { value: '#6c757d' },
+            tertiary: { value: '#495057' },
+          },
+        },
+      },
+    },
+  ],
 });
 
 // Verify Amplify configuration
@@ -355,7 +429,7 @@ const AuthenticatedApp = withAuthenticator(App, {
 
 export default function ThemedApp() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} colorMode="light">
       <AuthenticatedApp />
     </ThemeProvider>
   );

@@ -25,6 +25,12 @@
       },
       "storage": {
         "iknowuploadfinalprodstorage": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "drfaww22oktda",
+          "type": "manual"
+        }
       }
     }
   }
