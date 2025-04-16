@@ -78,26 +78,10 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
     const handleAddUser = async (e) => {
         e.preventDefault();
         
-        // Basic password confirmation validation
-        if (newUser.password !== newUser.confirmPassword) {
-            alert('As senhas não coincidem');
-            return;
-        }
-
-        // Username and Password validation
-        const alphanumericRegex = /^[a-zA-Z0-9]+$/;
-        if (!alphanumericRegex.test(newUser.username) || !alphanumericRegex.test(newUser.password)) {
-            alert('O nome de usuário e a senha devem conter apenas letras e números');
-            return;
-        }
-
-        if (newUser.username.length > 30 || newUser.password.length > 30) {
-            alert('O nome de usuário e a senha devem conter 30 caracteres ou menos');
-            return;
-        }
-
-        if (newUser.password.length < 8) {
-            alert('A senha deve conter pelo menos 8 caracteres');
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(newUser.username)) {
+            alert('Por favor, insira um endereço de e-mail válido');
             return;
         }
 
@@ -109,14 +93,16 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
             const createUserCommand = new AdminCreateUserCommand({
                 UserPoolId: 'us-east-1_ajpjAeVga',
                 Username: newUser.username,
-                TemporaryPassword: newUser.password,
                 UserAttributes: [
+                    {
+                        Name: 'email',
+                        Value: newUser.username
+                    },
                     {
                         Name: 'custom:companyID',
                         Value: company.ID
                     }
-                ],
-                MessageAction: 'SUPPRESS' // Don't send email
+                ]
             });
 
             try {
@@ -146,7 +132,7 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                 alert('Usuário criado com sucesso');
             } catch (error) {
                 if (error.name === 'UsernameExistsException') {
-                    alert('O nome de usuário já existe. Por favor, escolha um nome de usuário diferente.');
+                    alert('Este e-mail já está em uso. Por favor, use outro endereço de e-mail.');
                 } else {
                     throw error; // Re-throw other errors to be caught by the outer catch
                 }
@@ -351,22 +337,10 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                 <div className="users-list">
                                     <div className="add-user-form">
                                         <input
-                                            type="text"
-                                            placeholder="Nome de Usuário"
+                                            type="email"
+                                            placeholder="E-mail do Usuário"
                                             value={newUser.username}
                                             onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
-                                        />
-                                        <input
-                                            type="password"
-                                            placeholder="Senha"
-                                            value={newUser.password}
-                                            onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-                                        />
-                                        <input
-                                            type="password"
-                                            placeholder="Confirmação de Senha"
-                                            value={newUser.confirmPassword}
-                                            onChange={(e) => setNewUser({ ...newUser, confirmPassword: e.target.value })}
                                         />
                                         <button onClick={handleAddUser}>Adicionar Usuário</button>
                                     </div>
@@ -378,9 +352,6 @@ const EditCompanyModal = ({ company, onClose, onUpdate }) => {
                                                 <div key={user.Username} className="user-item">
                                                     <div className="user-item-content">
                                                         <span>{user.Username}</span>
-                                                        <span className="user-email">
-                                                            {user.Attributes?.find(attr => attr.Name === 'email')?.Value}
-                                                        </span>
                                                     </div>
                                                     <Button 
                                                         className='cancelButton'

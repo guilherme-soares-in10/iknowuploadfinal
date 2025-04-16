@@ -63,6 +63,7 @@ const customTranslations = {
     'Username/client id combination not found.': 'Combinação de nome de usuário/ID do cliente não encontrada.',
     'Password must have at least 8 characters': 'A senha deve ter pelo menos 8 caracteres.',
     'Invalid verification code provided, please try again.': 'Código de verificação inválido, por favor, tente novamente.',
+    'User password cannot be reset in the current state.': 'A senha do usuário não pode ser redefinida no estado atual.'
   }
 };
 
@@ -83,7 +84,7 @@ Amplify.configure({
   },
   Storage: {
     S3: {
-      bucket: 'iknowuploadfinalprodstorage5c9c4-prod',
+      bucket: 'iknow-upload-manual',
       region: 'us-east-1'
     }
   }
